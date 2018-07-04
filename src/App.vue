@@ -1,23 +1,31 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <lay-out></lay-out>
   </div>
 </template>
 
 <script>
+import layOut from './views/layout'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    layOut
+  }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss" type="text/css">
+@import url('normalize.css');
+html, body, #app {
+  height: 100%;
+}
+#app > .layout {
+  height: 100%;
+  & > .el-container {
+    height: 100%;
+  }
+  a {
+    text-decoration: none;
+  }
 }
 </style>
