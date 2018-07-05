@@ -1,18 +1,20 @@
 <template>
   <div class="layout">
     <el-container>
-      <el-aside width="200px">
+      <el-aside :width="isCollapse ? '64px' : '200px'">
       <el-menu
         :default-active="$route.path"
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
-        :collapse="false"
+        :collapse="isCollapse"
         text-color="rgb(191, 203, 217)"
         active-text-color="rgb(64, 158, 255)"
         background-color="rgb(48, 65, 86)"
+        show-timeout=1000
+        hide-timeout=1000
       >
-        <el-submenu v-for="(item, key) in routes" :index="item.name" :key="key">
+        <el-submenu v-for="(item, key) in routes" :index="item.name" :key="key" v-if="item.children&& item.children.length > 0">
           <template slot="title">
             <i class="el-icon-location"></i>
             <span slot="title">{{item.meta.title}}</span>
@@ -26,7 +28,9 @@
       </el-menu>
       </el-aside>
       <el-container>
-        <el-header>Header</el-header>
+        <el-header>
+          <i :class="'el-icon-d-arrow-' + (isCollapse ? 'right' : 'left')" @click="changeBarIsOpen"></i>
+        </el-header>
         <el-main>
           <router-view></router-view>
         </el-main>
@@ -38,7 +42,6 @@
 export default {
   data () {
     return {
-      isCollapse: true
     }
   },
   methods: {
@@ -47,12 +50,18 @@ export default {
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath)
+    },
+    changeBarIsOpen () {
+      this.$store.dispatch('changeBarIsOpen')
     }
   },
   computed: {
     routes () {
       var routes = this.$router.options.routes
       return routes
+    },
+    isCollapse () {
+      return this.$store.state.bar.barIsOpen
     }
   }
 }
@@ -60,16 +69,18 @@ export default {
 
 <style>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
+    width:200px;
+    min-height: 100%;
     box-sizing: border-box;
 }
 .el-header,
 .el-footer {
   background-color: #b3c0d1;
   color: #333;
-  text-align: center;
   line-height: 60px;
+}
+.el-header > i {
+  font-size: 24px;
 }
 .el-menu-item:hover,
 .el-submenu__title:hover {
@@ -80,6 +91,8 @@ export default {
   color: #333;
   text-align: center;
   line-height: 200px;
+  padding-top: 60px;
+  transition: all 1s;
 }
 .el-main {
   background-color: #e9eef3;
@@ -99,5 +112,8 @@ body > .el-container {
 }
 .el-menu-item-group__title {
   padding: 0;
+}
+.el-menu {
+  border-right: none;
 }
 </style>
