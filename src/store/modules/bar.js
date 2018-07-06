@@ -1,10 +1,11 @@
 const bar = {
   state: {
-    barIsOpen: false
+    barIsOpen: window.localStorage.getItem('barIsOpen') === 'true'
   },
   mutations: {
     changeBarIsOpen (state) {
       state.barIsOpen = !state.barIsOpen
+      window.localStorage.setItem('barIsOpen', state.barIsOpen)
     }
   },
   actions: {

@@ -19,13 +19,13 @@ export default {
 html, body, #app {
   height: 100%;
 }
+a {
+  text-decoration: none;
+}
 #app > .layout {
   height: 100%;
   & > .el-container {
     height: 100%;
-  }
-  a {
-    text-decoration: none;
   }
 }
 </style>

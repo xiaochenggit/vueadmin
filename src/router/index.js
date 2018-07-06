@@ -11,7 +11,7 @@ export default new Router({
       name: 'Index',
       component: Index,
       meta: {
-        title: 'Index',
+        title: '首页',
         icon: 'index'
       }
     },
@@ -19,7 +19,7 @@ export default new Router({
       path: '/data',
       name: 'Data',
       meta: {
-        title: 'Data',
+        title: '数据统计',
         icon: 'Data'
       },
       component: () => import('@/views/data/data'),
@@ -29,7 +29,7 @@ export default new Router({
         name: 'Data1',
         component: () => import('@/views/data/data1'),
         meta: {
-          title: 'Data1',
+          title: '实时数据',
           icon: 'Data1'
         }
       }, {
@@ -37,7 +37,7 @@ export default new Router({
         name: 'Data2',
         component: () => import('@/views/data/data2'),
         meta: {
-          title: 'Data2',
+          title: '订单日报',
           icon: 'Data2'
         }
       }]
