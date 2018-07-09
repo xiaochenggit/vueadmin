@@ -123,7 +123,6 @@ export default {
 .el-aside {
   background-color: rgb(48, 65, 86);
   color: #333;
-  line-height: 200px;
   padding-top: 60px;
   transition: all 1s;
   overflow-x:hidden;
@@ -146,10 +145,8 @@ export default {
     background-color:hsla(220,4%,58%,.5);
 }
 .el-main {
-  background-color: #e9eef3;
+  background-color: #fff;
   color: #333;
-  text-align: center;
-  line-height: 160px;
 }
 body > .el-container {
   margin-bottom: 40px;
