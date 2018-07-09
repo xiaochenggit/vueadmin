@@ -29,6 +29,14 @@
           prop="productName"
           label="商品名称"
           width="400">
+          <template slot-scope="scope">
+            <template v-if="scope.row.edit">
+              <el-input v-model="scope.row.productName" placeholder="请输入商品名称"></el-input>
+              <el-button type="warning" icon='el-icon-refresh' size='small' @click.native="edit('cancel', scope.row)">取消</el-button>
+              <el-button type="success" icon='el-icon-check' size='small' @click.native="edit('compalte', scope.row)">确认</el-button>
+            </template>
+            <span v-else>{{scope.row.productName}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="categoryName"
@@ -69,8 +77,8 @@
           fixed="right"
           width="240">
            <template slot-scope="scope">
-            <el-button type="text" size="small">查看</el-button>
-            <el-button type="text" size="small">编辑</el-button>
+            <el-button type="success" size="small" icon='el-icon-edit' @click.native='see(scope.row.productName)'>查看</el-button>
+            <el-button type="primary" size="small" @click.native='scope.row.edit = !scope.row.edit; backProductName=scope.row.productName' v-if="!scope.row.edit">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,6 +95,24 @@
         :total="this.total">
       </el-pagination>
     </div>
+    <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+      <h3>{{isSeeProductName}}</h3>
+      <el-form :model="form">
+        <el-form-item label="活动名称" :label-width="formLabelWidth">
+          <el-input v-model="form.name" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="活动区域" :label-width="formLabelWidth">
+          <el-select v-model="form.region" placeholder="请选择活动区域">
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogTableVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogTableVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -95,30 +121,27 @@ import { getProductList } from '@/utils/api.js'
 export default {
   data () {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }],
-      productList: [],
-      total: 0,
-      page: 1,
-      pageSize: 20,
-      loading: true,
+      productList: [], // 商品列表
+      total: 0, // 数据条目
+      page: 1, // 当前页
+      pageSize: 20, // 每页条目
+      loading: true, // 是否正在加载
       productCode: '',
-      isGroup: false
+      isGroup: false,
+      dialogTableVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      formLabelWidth: '120px',
+      isSeeProductName: '',
+      backProductName:　''
     }
   },
   created () {
@@ -138,6 +161,9 @@ export default {
         vipPrice: 0
       }
       getProductList(query).then(res => {
+        res.data.forEach(item => {
+            item.edit = false
+        });
         this.loading = false
         this.productList = res.data
         this.total = res.iTotalDisplayRecords
@@ -150,6 +176,16 @@ export default {
     handleCurrentChange (val) {
       this.page = val
       this.getList()
+    },
+    see (productName) {
+      this.isSeeProductName = productName
+      this.dialogTableVisible = true
+    },
+    edit (status, row) {
+      row.edit = false
+      if (status === 'cancel') {
+        row.productName = this.backProductName
+      }
     }
   }
 }
