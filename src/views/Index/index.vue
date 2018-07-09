@@ -141,7 +141,7 @@ export default {
       },
       formLabelWidth: '120px',
       isSeeProductName: '',
-      backProductName:　''
+      backProductName: ''
     }
   },
   created () {
@@ -162,8 +162,8 @@ export default {
       }
       getProductList(query).then(res => {
         res.data.forEach(item => {
-            item.edit = false
-        });
+          item.edit = false
+        })
         this.loading = false
         this.productList = res.data
         this.total = res.iTotalDisplayRecords
